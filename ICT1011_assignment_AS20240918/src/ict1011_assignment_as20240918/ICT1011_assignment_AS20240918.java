@@ -122,8 +122,38 @@ public class ICT1011_assignment_AS20240918 {
         }    
     }
     public static void distanceManagement(){
+        Scanner sc= new Scanner(System.in);
+         do {
+             System.out.println("=====Distance Management Menu ===== ");
+             System.out.println("1. Input distance between two cities");
+             System.out.println("2. Edit distance between two cities");
+             System.out.println("3. Back to the main menu");
+             System.out.println("Enter your choice: ");
+             choice = sc.nextInt();
+             sc.nextLine();
+ 
+            switch (choice) {
+                case 1:
+                    inputDistance();
+                    break;
+                case 2:
+                    editDistance();
+                   break;
+                case 3:
+                    System.out.println("Return to the main menu");
+                    break;
+                default:
+                    System.out.println("Invalid choice.");
+            }
+        } while (choice != 3);        
+    }
+    public static void inputDistance(){
         
     }
+    public static void editDistance(){
+        
+    }
+    
     public static void vehicleManagement(){
         
     }
