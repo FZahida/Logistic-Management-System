@@ -4,7 +4,8 @@ import java.util.Scanner;
 
 public class ICT1011_assignment_AS20240918 {
      private static int choice;
-
+     static final int MAX_CITIES=30;
+     
     public static void main(String[] args) {
         Scanner sc=new Scanner(System.in);
         do {
@@ -78,12 +79,23 @@ public class ICT1011_assignment_AS20240918 {
                 case 5:
                     System.out.println("Return to the Main Menu");
                     break;
-                default:
+                default: 
                     System.out.println("Invalid choice.");
             }
         } while (choice != 5);
     }
     public static void addCity(){
+        Scanner sc=new Scanner(System.in);
+        String[] cities = new String[MAX_CITIES];
+        int cityCount=0;
+        if (cityCount>=MAX_CITIES){
+            System.out.println("City list is already full");
+        }
+        System.out.print("Enter city name: ");
+        String name = sc.nextLine();
+        cities[cityCount++] = name;
+        System.out.println("City added successfully.");
+        
         
     }
     public static void renameCity(){
