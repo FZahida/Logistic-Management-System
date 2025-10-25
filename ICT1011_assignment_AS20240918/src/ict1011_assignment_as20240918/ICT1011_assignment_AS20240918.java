@@ -5,6 +5,7 @@ import java.util.Scanner;
 public class ICT1011_assignment_AS20240918 {
      private static int choice;
      static final int MAX_CITIES=30;
+     static int cityCount;
      
     public static void main(String[] args) {
         Scanner sc=new Scanner(System.in);
@@ -75,7 +76,7 @@ public class ICT1011_assignment_AS20240918 {
                     removeCity();
                     break;
                 case 4:
-                    cityList();
+                    cityList(cities);
                     break;
                 case 5:
                     System.out.println("Return to the Main Menu");
@@ -87,7 +88,6 @@ public class ICT1011_assignment_AS20240918 {
     }
     public static void addCity(String[] cities ){
         Scanner sc=new Scanner(System.in);
-        int cityCount=0;
         if (cityCount>=MAX_CITIES){
             System.out.println("City list is already full.");
         }
@@ -110,10 +110,11 @@ public class ICT1011_assignment_AS20240918 {
     public static void removeCity(){
         
     }   
-    public static void cityList(){
+    public static void cityList(String[]cities){
         System.out.println("List of the cities");
-        
-        
+        for(int i=0; i<cityCount; i++ ){
+            System.out.println(i+1 +"."+cities[i]);      
+        }    
     }
     public static void distanceManagement(){
         
