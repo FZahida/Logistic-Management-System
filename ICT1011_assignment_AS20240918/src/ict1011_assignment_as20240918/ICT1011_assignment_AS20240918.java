@@ -4,8 +4,11 @@ import java.util.Scanner;
 
 public class ICT1011_assignment_AS20240918 {
      private static int choice;
+     
      static final int MAX_CITIES=30;
      static int cityCount;
+     
+     static final int MAX_DELIVERIES = 50;
      
     public static void main(String[] args) {
         Scanner sc=new Scanner(System.in);
@@ -13,11 +16,19 @@ public class ICT1011_assignment_AS20240918 {
         String[] cities = new String[MAX_CITIES];
         int[][] distance = new int[MAX_CITIES][MAX_CITIES];
         
-        String[] vehicleTypes = {"Van", "Truck", "Lorry"};
+        String[] vehicles = {"Van", "Truck", "Lorry"};
         int[] capacity = {1000, 5000, 10000};
         int[] ratePerKm = {30, 40, 80};
         int[] speed = {60, 50, 45};
         int[] efficiency = {12, 6, 4};
+        
+        int[] sourceCity = new int[MAX_DELIVERIES];
+        int[] destinationCity = new int[MAX_DELIVERIES];
+        double[] vehicleWeight = new double[MAX_DELIVERIES];
+        int[] vehicleType = new int[MAX_DELIVERIES];
+        double[] totalCost = new double[MAX_DELIVERIES];
+        double[] totalTime = new double[MAX_DELIVERIES];
+
 
 
         do {
@@ -32,7 +43,7 @@ public class ICT1011_assignment_AS20240918 {
                     distanceManagement(distance,cities);
                     break;
                 case 3:
-                    deliveryRequestHandling();
+                    deliveryRequestHandling(distance,vehicles,capacity);
                     break;
                 case 4:
                     calculations();
@@ -149,7 +160,7 @@ public class ICT1011_assignment_AS20240918 {
  
             switch (choice) {
                 case 1:
-                    inputDistance(distance);
+                    inputDistance(distance,cities);
                     break;
                 case 2:
                     editDistance(distance,cities);
@@ -166,7 +177,8 @@ public class ICT1011_assignment_AS20240918 {
         } while (choice != 4);        
     }
     
-    public static void inputDistance(int[][] distance){
+    public static void inputDistance(int[][] distance,String[]cities){
+        cityList(cities);
         Scanner sc=new Scanner(System.in);
         if(cityCount<2){
             System.out.println("Add at least 2 cities first");
@@ -244,7 +256,7 @@ public class ICT1011_assignment_AS20240918 {
            System.out.println();
         }
     }
-    public static void deliveryRequestHandling(){
+    public static void deliveryRequestHandling(int[][]distance,String[]vehicles,int[]capacity){
         Scanner sc=new Scanner(System.in);
         if(cityCount<2){
             System.out.println("please add two cities.");
@@ -254,9 +266,33 @@ public class ICT1011_assignment_AS20240918 {
         int source=sc.nextInt();
         System.out.print("Enter destination city index :");
         int destination=sc.nextInt();
-        
+        if (distance[source][destination] == 0) {
+            System.out.println("Distance not defined between these cities!");
+            return;
+        }
+
+        System.out.println("Vehicle Types:");
+        for (int i = 0; i < vehicles.length; i++)
+            System.out.println((i + 1) + ". " + vehicles[i]);
+        System.out.print("Select vehicle type: ");
+        int vehicle = sc.nextInt() - 1;
+
+        System.out.print("Enter weight (kg): ");
+        double weight = sc.nextDouble();
+
+        if (source == destination) {
+            System.out.println("Source and destination cannot be same.");
+            return;
+        }
+        if (weight > capacity[vehicle]) {
+            System.out.println("Weight exceeds vehicle capacity!");
+            
+        }
+       
     }
+            
     public static void calculations(){
+        
         
     }
      public static void performanceReport(){
