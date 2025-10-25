@@ -73,7 +73,7 @@ public class ICT1011_assignment_AS20240918 {
                     renameCity(cities);
                     break;
                 case 3:
-                    removeCity();
+                    removeCity(cities);
                     break;
                 case 4:
                     cityList(cities);
@@ -107,8 +107,13 @@ public class ICT1011_assignment_AS20240918 {
         cities[index] = sc.nextLine();
         System.out.println("City renamed successfully.");   
     }
-    public static void removeCity(){
-        
+    public static void removeCity(String[]cities){
+        Scanner sc=new Scanner(System.in);
+        System.out.print("Enter city indx to remove: ");
+        int index =sc.nextInt();
+        for (int i=index; i<cityCount- 1;i++ ){
+            cities[i]=cities[i+1];          
+        }   
     }   
     public static void cityList(String[]cities){
         System.out.println("List of the cities");
