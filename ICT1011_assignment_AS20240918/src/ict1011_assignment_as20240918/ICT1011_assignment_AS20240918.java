@@ -8,13 +8,14 @@ public class ICT1011_assignment_AS20240918 {
      
     public static void main(String[] args) {
         Scanner sc=new Scanner(System.in);
+        String[] cities = new String[MAX_CITIES];
         do {
             printMenu();
             choice=sc.nextInt();
             sc.nextLine();
             switch (choice){
                 case 1:
-                    cityManagement();
+                    cityManagement(cities);
                     break;   
                 case 2:
                     distanceManagement();
@@ -50,7 +51,7 @@ public class ICT1011_assignment_AS20240918 {
         System.out.println("7. Exit");
         System.out.print("Enter your choice:");
     }
-    public static void cityManagement(){
+    public static void cityManagement(String[]cities){
         Scanner sc=new Scanner(System.in);
         do {
             System.out.println("=====City Management Menu ===== ");
@@ -65,10 +66,10 @@ public class ICT1011_assignment_AS20240918 {
 
             switch (choice) {
                 case 1:
-                    addCity();
+                    addCity(cities);
                     break;
                 case 2:
-                    renameCity();
+                    renameCity(cities);
                     break;
                 case 3:
                     removeCity();
@@ -84,27 +85,34 @@ public class ICT1011_assignment_AS20240918 {
             }
         } while (choice != 5);
     }
-    public static void addCity(){
+    public static void addCity(String[] cities ){
         Scanner sc=new Scanner(System.in);
-        String[] cities = new String[MAX_CITIES];
         int cityCount=0;
         if (cityCount>=MAX_CITIES){
-            System.out.println("City list is already full");
+            System.out.println("City list is already full.");
         }
         System.out.print("Enter city name: ");
         String name = sc.nextLine();
         cities[cityCount++] = name;
         System.out.println("City added successfully.");
-        
+        System.out.println("There are "+cityCount+" cities in the city list.");
         
     }
-    public static void renameCity(){
-        
+    public static void renameCity(String[]cities){
+        Scanner sc=new Scanner (System.in);
+        System.out.println("Enter city index to rename: ");
+        int index =sc.nextInt();
+        sc.nextLine();
+        System.out.print("Enter new name of the city: ");
+        cities[index] = sc.nextLine();
+        System.out.println("City renamed successfully.");   
     }
     public static void removeCity(){
         
     }   
     public static void cityList(){
+        System.out.println("List of the cities");
+        
         
     }
     public static void distanceManagement(){
