@@ -12,6 +12,13 @@ public class ICT1011_assignment_AS20240918 {
         
         String[] cities = new String[MAX_CITIES];
         int[][] distance = new int[MAX_CITIES][MAX_CITIES];
+        
+        String[] vehicleTypes = {"Van", "Truck", "Lorry"};
+        int[] capacity = {1000, 5000, 10000};
+        int[] ratePerKm = {30, 40, 80};
+        int[] speed = {60, 50, 45};
+        int[] efficiency = {12, 6, 4};
+
 
         do {
             printMenu();
@@ -25,35 +32,31 @@ public class ICT1011_assignment_AS20240918 {
                     distanceManagement(distance,cities);
                     break;
                 case 3:
-                    vehicleManagement();
-                    break;
-                case  4:
                     deliveryRequestHandling();
                     break;
-                case 5:
+                case 4:
                     calculations();
                     break;
-                case 6:
+                case 5:
                     performanceReport();
                     break;
-                case 7:
+                case 6:
                     System.out.println("Exiting....");
                     break;
                 default :
                     System.out.println("Invalid choice.");       
             }
-        }while (choice !=7);
+        }while (choice !=6);
     }
     
     public static void printMenu(){
         System.out.println("=====Logistic Management System=====");
         System.out.println("1. City Management");
         System.out.println("2. Distance Management");
-        System.out.println("3. Vehicle Management");
-        System.out.println("4. Delivery requests");
-        System.out.println("5. Cost,time and fuel calculations");
-        System.out.println("6. Performance Report");
-        System.out.println("7. Exit");
+        System.out.println("3. Delivery requests");
+        System.out.println("4. Cost,time and fuel calculations");
+        System.out.println("5. Performance Report");
+        System.out.println("6. Exit");
         System.out.print("Enter your choice:");
     }
     
@@ -194,7 +197,7 @@ public class ICT1011_assignment_AS20240918 {
     public static void editDistance(int[][]distance,String[]cities){
         Scanner sc=new Scanner(System.in);
         if(cityCount<2){
-            System.out.println("Add at least 2 cities first");
+            System.out.println("Add at least 2 cities ");
             return;
         }
         System.out.print("Enter source city index :");
@@ -203,7 +206,7 @@ public class ICT1011_assignment_AS20240918 {
         int destination=sc.nextInt();
         
         if(source==destination){
-            System.out.println("Invalid!...Source and Destination city cannot be same");
+            System.out.println("Invalid! starting city and Destination city cannot be same");
             return;
         }
          if(distance[source][destination] == 0){
@@ -241,12 +244,16 @@ public class ICT1011_assignment_AS20240918 {
            System.out.println();
         }
     }
-
-    
-    public static void vehicleManagement(){
-        
-    }
     public static void deliveryRequestHandling(){
+        Scanner sc=new Scanner(System.in);
+        if(cityCount<2){
+            System.out.println("please add two cities.");
+            return;
+        }
+        System.out.print("Enter source city index :");
+        int source=sc.nextInt();
+        System.out.print("Enter destination city index :");
+        int destination=sc.nextInt();
         
     }
     public static void calculations(){
