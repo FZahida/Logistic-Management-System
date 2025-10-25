@@ -22,7 +22,7 @@ public class ICT1011_assignment_AS20240918 {
                     cityManagement(cities);
                     break;   
                 case 2:
-                    distanceManagement(distance);
+                    distanceManagement(distance,cities);
                     break;
                 case 3:
                     vehicleManagement();
@@ -44,6 +44,7 @@ public class ICT1011_assignment_AS20240918 {
             }
         }while (choice !=7);
     }
+    
     public static void printMenu(){
         System.out.println("=====Logistic Management System=====");
         System.out.println("1. City Management");
@@ -55,6 +56,7 @@ public class ICT1011_assignment_AS20240918 {
         System.out.println("7. Exit");
         System.out.print("Enter your choice:");
     }
+    
     public static void cityManagement(String[]cities){
         Scanner sc=new Scanner(System.in);
         do {
@@ -89,10 +91,12 @@ public class ICT1011_assignment_AS20240918 {
             }
         } while (choice != 5);
     }
+    
     public static void addCity(String[] cities ){
         Scanner sc=new Scanner(System.in);
         if (cityCount>=MAX_CITIES){
             System.out.println("City list is already full.");
+            return;
         }
         System.out.print("Enter city name: ");
         String name = sc.nextLine();
@@ -101,6 +105,7 @@ public class ICT1011_assignment_AS20240918 {
         System.out.println("There are "+cityCount+" cities in the city list.");
         
     }
+    
     public static void renameCity(String[]cities){
         Scanner sc=new Scanner (System.in);
         System.out.println("Enter city index to rename: ");
@@ -110,20 +115,23 @@ public class ICT1011_assignment_AS20240918 {
         cities[index] = sc.nextLine();
         System.out.println("City renamed successfully.");   
     }
+    
     public static void removeCity(String[]cities){
         Scanner sc=new Scanner(System.in);
-        System.out.print("Enter city indx to remove: ");
+        System.out.print("Enter city index to remove: ");
         int index =sc.nextInt();
         for (int i=index; i<cityCount- 1;i++ ){
             cities[i]=cities[i+1];          
         }   
     }   
+    
     public static void cityList(String[]cities){
         System.out.println("List of the cities");
         for(int i=0; i<cityCount; i++ ){
             System.out.println(i+1 +"."+cities[i]);      
         }    
     }
+    
     public static void distanceManagement(int[][]distance,String[]cities){
         Scanner sc= new Scanner(System.in);
          do {
@@ -144,7 +152,7 @@ public class ICT1011_assignment_AS20240918 {
                     editDistance(distance,cities);
                    break;
                 case 3:
-                    distanceTable();
+                    distanceTable(cities,distance);
                     break;
                 case 4:
                     System.out.println("Return to the main menu");
@@ -154,6 +162,7 @@ public class ICT1011_assignment_AS20240918 {
             }
         } while (choice != 4);        
     }
+    
     public static void inputDistance(int[][] distance){
         Scanner sc=new Scanner(System.in);
         if(cityCount<2){
@@ -166,7 +175,7 @@ public class ICT1011_assignment_AS20240918 {
         int destination=sc.nextInt();
         
         if(source==destination){
-            System.out.println("Source city and Destination city cannot be same");
+            System.out.println("Source and Destination city cannot be same");
             return;
         }
         if(distance[source][destination]!=0){
@@ -181,6 +190,7 @@ public class ICT1011_assignment_AS20240918 {
         
         System.out.println("Distance added successfully");   
     }
+    
     public static void editDistance(int[][]distance,String[]cities){
         Scanner sc=new Scanner(System.in);
         if(cityCount<2){
@@ -193,7 +203,7 @@ public class ICT1011_assignment_AS20240918 {
         int destination=sc.nextInt();
         
         if(source==destination){
-            System.out.println("Invalid!...Source city and Destination city cannot be same");
+            System.out.println("Invalid!...Source and Destination city cannot be same");
             return;
         }
          if(distance[source][destination] == 0){
@@ -202,15 +212,34 @@ public class ICT1011_assignment_AS20240918 {
         }
         System.out.println("Current distance between"+ cities[source]+"and"+cities[destination]+":"+distance[source][destination]+"km");
         System.out.print("Enter new distance (km): ");
-        int NDist=sc.nextInt();
+        int NewDist=sc.nextInt();
         
-        distance[source][destination]=NDist;
-        distance[destination][source]=NDist;
+        distance[source][destination]=NewDist;
+        distance[destination][source]=NewDist;
         
         System.out.println("Distance updated successfully");           
     }
-    public static void distanceTable(){
-        
+    
+    public static void distanceTable(String[]cities,int[][]distance){
+        if (cityCount == 0) {
+            System.out.println("No cities added yet!");
+            return;
+        }
+
+        System.out.println("--- Distance Table (km) ---");
+        System.out.print("        ");
+        for (int i = 0; i < cityCount; i++) {
+           System.out.printf("%10s", cities[i]);
+        }
+        System.out.println();
+
+        for (int i = 0; i < cityCount; i++) {
+           System.out.printf("%-8s", cities[i]);
+           for (int j = 0; j < cityCount; j++) {
+                System.out.printf("%10d", distance[i][j]);
+            }
+           System.out.println();
+        }
     }
 
     
