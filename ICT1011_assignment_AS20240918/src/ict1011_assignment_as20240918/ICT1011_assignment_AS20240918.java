@@ -8,7 +8,7 @@ public class ICT1011_assignment_AS20240918 {
      static final int MAX_CITIES=30;
      static int cityCount;
      
-     static final int MAX_DELIVERIES = 50;
+     static final double FUEL_PRICE = 310.0;
      
     public static void main(String[] args) {
         Scanner sc=new Scanner(System.in);
@@ -21,15 +21,6 @@ public class ICT1011_assignment_AS20240918 {
         int[] ratePerKm = {30, 40, 80};
         int[] speed = {60, 50, 45};
         int[] efficiency = {12, 6, 4};
-        
-        int[] sourceCity = new int[MAX_DELIVERIES];
-        int[] destinationCity = new int[MAX_DELIVERIES];
-        double[] vehicleWeight = new double[MAX_DELIVERIES];
-        int[] vehicleType = new int[MAX_DELIVERIES];
-        double[] totalCost = new double[MAX_DELIVERIES];
-        double[] totalTime = new double[MAX_DELIVERIES];
-
-
 
         do {
             printMenu();
@@ -43,7 +34,7 @@ public class ICT1011_assignment_AS20240918 {
                     distanceManagement(distance,cities);
                     break;
                 case 3:
-                    deliveryRequestHandling(distance,vehicles,capacity);
+                    deliveryRequestHandling(distance,vehicles,capacity,cities,ratePerKm,speed,efficiency);
                     break;
                 case 4:
                     calculations();
@@ -256,7 +247,7 @@ public class ICT1011_assignment_AS20240918 {
            System.out.println();
         }
     }
-    public static void deliveryRequestHandling(int[][]distance,String[]vehicles,int[]capacity){
+    public static void deliveryRequestHandling(int[][]distance,String[]vehicles,int[]capacity,String[]cities,int[]ratePerKm,int[]speed,int[]efficiency){
         Scanner sc=new Scanner(System.in);
         if(cityCount<2){
             System.out.println("please add two cities.");
@@ -286,11 +277,33 @@ public class ICT1011_assignment_AS20240918 {
         }
         if (weight > capacity[vehicle]) {
             System.out.println("Weight exceeds vehicle capacity!");
-            
+            return;
         }
        
+        double [] result =calculateCost(source,destination,vehicle,weight,distance,ratePerKm,speed,efficiency);
+ 
+           
     }
-            
+    public static double [] calculateCost(int source, int destination, int vehicle, double weight, int[][]distance,int[]ratePerKm,int[]speed,int[]efficiency) {
+        double D = distance[source][destination];
+        double R = ratePerKm[vehicle];
+        double S = speed[vehicle];
+        double E = efficiency[vehicle];
+        double F = FUEL_PRICE;
+
+        double baseCost = D * R * (1 + (weight / 10000));
+        double time = D/S;
+        double fuelUsed = D / E;
+        double fuelCost = fuelUsed * F;
+        double totalOperational = baseCost + fuelCost;
+        double profit = baseCost * 0.25;
+        double customerCharge = totalOperational + profit;
+        
+        return new double[]{baseCost, time, fuelUsed, fuelCost, totalOperational, customerCharge};  
+    }
+    
+    
+   
     public static void calculations(){
         
         
