@@ -11,7 +11,7 @@ public class ICT1011_assignment_AS20240918 {
      static final double FUEL_PRICE = 310.0;
      
      static final int MAX_DELIVERIES = 50;
-
+     static int deliveryCount;
      static int[] sourceCity = new int[MAX_DELIVERIES];
      static int[] destinationCity = new int[MAX_DELIVERIES];
      static double[] vehicleWeight = new double[MAX_DELIVERIES];
@@ -46,15 +46,18 @@ public class ICT1011_assignment_AS20240918 {
                     deliveryRequestHandling(distance,vehicles,capacity,cities,ratePerKm,speed,efficiency);
                     break;
                 case 4:
-                    performanceReport();
+                    findLeastCostPath(cities,distance);
                     break;
                 case 5:
-                    System.out.println("Exiting....");
+                    performanceReport();
+                    break;
+                case 6:
+                    System.out.println("Exiting.....");
                     break;
                 default :
                     System.out.println("Invalid choice.");       
             }
-        }while (choice !=5);
+        }while (choice !=6);
     }
     
     public static void printMenu(){
@@ -62,8 +65,9 @@ public class ICT1011_assignment_AS20240918 {
         System.out.println("1. City Management");
         System.out.println("2. Distance Management");
         System.out.println("3. Delivery requests");
-        System.out.println("4. Performance Report");
-        System.out.println("5. Exit");
+        System.out.println("4. Find Least-Cost Path");
+        System.out.println("5. Performance Report");
+        System.out.println("6. Exit");
         System.out.print("Enter your choice:");
     }
     
@@ -286,7 +290,9 @@ public class ICT1011_assignment_AS20240918 {
         }
        
         double [] result =calculateCost(source,destination,vehicle,weight,distance,ratePerKm,speed,efficiency);
+        
         saveDelivaryRecord(source,destination,vehicle,weight,result[5],result[1]);
+        
         displayDeliverySummary(source,destination,vehicle,weight,result,cities,vehicles);
            
     }
@@ -308,7 +314,7 @@ public class ICT1011_assignment_AS20240918 {
         
     }
      public static void saveDelivaryRecord(int source,int destination, int vehicle,double weight,double totalCharge, double time){
-        int deliveryCount=0;
+       
         if (deliveryCount>=MAX_DELIVERIES){
             System.out.println("Delivery record list is already filled.");
             return;
@@ -323,8 +329,7 @@ public class ICT1011_assignment_AS20240918 {
 
         System.out.println("Delivery record saved successfully");
     }   
-     
-     public static void displayDeliverySummary(int source, int destination, int vehicle, double weight, double[] r,String[]cities,String[]vehicles) {
+       public static void displayDeliverySummary(int source, int destination, int vehicle, double weight, double[] r,String[]cities,String[]vehicles) {
         System.out.println("\n===== DELIVERY SUMMARY =====");
         System.out.println("From: " + cities[source]);
         System.out.println("To: " + cities[destination]);
@@ -335,9 +340,53 @@ public class ICT1011_assignment_AS20240918 {
         System.out.printf("Fuel Cost: %.2f LKR%n", r[3]);
         System.out.printf("Operational Cost: %.2f LKR%n", r[4]);
         System.out.printf("Customer Charge: %.2f LKR%n", r[5]);
-       System.out.printf("Estimated Time: %.2f hours%n", r[1]);
+        System.out.printf("Estimated Time: %.2f hours%n", r[1]);
+    }
+    public static void findLeastCostPath(String[]cities,int[][]distance) {
+        Scanner sc=new Scanner(System.in);
+        cityList(cities);
+        System.out.print("Enter source city index: ");
+        int source = sc.nextInt();
+        System.out.print("Enter destination city index: ");
+        int destination = sc.nextInt();
+
+        if (source == destination) {
+            System.out.println("Source and destination cannot be same!");
+            return;
+        }
+         calculateShortestDistance(source,destination,distance,cities);
+    }
+    public static int calculateShortestDistance(int source, int destination,int[][]distance,String[]cities) {
+        int mDist = distance[source][destination];
+        int bestVia = -1; 
+
+        for (int i = 0; i < cityCount; i++) {         
+            if (i == source || i == destination){                
+                continue;
+            }
+            if (distance[source][i] > 0 && distance[i][destination] > 0) {               
+                int total = distance[source][i] + distance[i][destination];
+                if (mDist == 0 || total < mDist) {              
+                    mDist = total;
+                    bestVia = i; 
+                }
+            }
+        }
+        System.out.println("===== LEAST-COST PATH RESULT =====");
+        if (mDist == 0) {
+            System.out.println("No route found between " + cities[source] + " and " + cities[destination] + "!");
+        } else if (bestVia == -1) {
+            System.out.println("Best route: " + cities[source] + " → " + cities[destination]);
+            System.out.println("Total Distance: " + mDist + " km");
+        } else {
+            System.out.println("Best route: " + cities[source] + " → " + cities[bestVia] + " → " + cities[destination]);
+            System.out.println("Total Distance: " + mDist + " km");
+        }
+        return mDist;
     }
      public static void performanceReport(){
+
+
         
     }  
     
