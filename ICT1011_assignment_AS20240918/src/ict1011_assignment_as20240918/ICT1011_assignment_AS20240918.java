@@ -10,6 +10,15 @@ public class ICT1011_assignment_AS20240918 {
      
      static final double FUEL_PRICE = 310.0;
      
+     static final int MAX_DELIVERIES = 50;
+
+     static int[] sourceCity = new int[MAX_DELIVERIES];
+     static int[] destinationCity = new int[MAX_DELIVERIES];
+     static double[] vehicleWeight = new double[MAX_DELIVERIES];
+     static int[] vehicleType = new int[MAX_DELIVERIES];
+     static double[] totalCost = new double[MAX_DELIVERIES];
+     static double[] totalTime = new double[MAX_DELIVERIES];
+     
     public static void main(String[] args) {
         Scanner sc=new Scanner(System.in);
         
@@ -37,18 +46,15 @@ public class ICT1011_assignment_AS20240918 {
                     deliveryRequestHandling(distance,vehicles,capacity,cities,ratePerKm,speed,efficiency);
                     break;
                 case 4:
-                    calculations();
-                    break;
-                case 5:
                     performanceReport();
                     break;
-                case 6:
+                case 5:
                     System.out.println("Exiting....");
                     break;
                 default :
                     System.out.println("Invalid choice.");       
             }
-        }while (choice !=6);
+        }while (choice !=5);
     }
     
     public static void printMenu(){
@@ -56,45 +62,44 @@ public class ICT1011_assignment_AS20240918 {
         System.out.println("1. City Management");
         System.out.println("2. Distance Management");
         System.out.println("3. Delivery requests");
-        System.out.println("4. Cost,time and fuel calculations");
-        System.out.println("5. Performance Report");
-        System.out.println("6. Exit");
+        System.out.println("4. Performance Report");
+        System.out.println("5. Exit");
         System.out.print("Enter your choice:");
     }
     
     public static void cityManagement(String[]cities){
         Scanner sc=new Scanner(System.in);
         do {
-            System.out.println("=====City Management Menu ===== ");
-            System.out.println("1. Add a city");
-            System.out.println("2. Rename a city");
-            System.out.println("3. Remove a city");
-            System.out.println("4. List of current cities");
-            System.out.println("5. Back to main menu");
-            System.out.println("Enter your choice:" );
-            choice = sc.nextInt();
-            sc.nextLine();
-
+             System.out.println("=====City Management Menu ===== ");
+             System.out.println("1. Add a city");
+             System.out.println("2. Rename a city");
+             System.out.println("3. Remove a city");
+             System.out.println("4. List of current cities");
+             System.out.println("0. Back to main menu");
+             System.out.println("Enter your choice: ");
+             choice = sc.nextInt();
+             sc.nextLine();
+ 
             switch (choice) {
                 case 1:
                     addCity(cities);
                     break;
                 case 2:
                     renameCity(cities);
-                    break;
+                   break;
                 case 3:
                     removeCity(cities);
                     break;
                 case 4:
                     cityList(cities);
                     break;
-                case 5:
-                    System.out.println("Return to the Main Menu");
+                case 0:
+                    System.out.println("Return to the main menu");
                     break;
-                default: 
+                default:
                     System.out.println("Invalid choice.");
             }
-        } while (choice != 5);
+        } while (choice != 0);  
     }
     
     public static void addCity(String[] cities ){
@@ -117,7 +122,7 @@ public class ICT1011_assignment_AS20240918 {
         int index =sc.nextInt();
         sc.nextLine();
         System.out.print("Enter new name of the city: ");
-        cities[index] = sc.nextLine();
+        cities[index-1] = sc.nextLine();
         System.out.println("City renamed successfully.");   
     }
     
@@ -125,7 +130,7 @@ public class ICT1011_assignment_AS20240918 {
         Scanner sc=new Scanner(System.in);
         System.out.print("Enter city index to remove: ");
         int index =sc.nextInt();
-        for (int i=index; i<cityCount- 1;i++ ){
+        for (int i=index-1; i<cityCount- 1;i++ ){
             cities[i]=cities[i+1];          
         }   
     }   
@@ -281,7 +286,8 @@ public class ICT1011_assignment_AS20240918 {
         }
        
         double [] result =calculateCost(source,destination,vehicle,weight,distance,ratePerKm,speed,efficiency);
- 
+        saveDelivaryRecord(source,destination,vehicle,weight,result[5],result[1]);
+        displayDeliverySummary(source,destination,vehicle,weight,result,cities,vehicles);
            
     }
     public static double [] calculateCost(int source, int destination, int vehicle, double weight, int[][]distance,int[]ratePerKm,int[]speed,int[]efficiency) {
@@ -296,17 +302,40 @@ public class ICT1011_assignment_AS20240918 {
         double fuelUsed = D / E;
         double fuelCost = fuelUsed * F;
         double totalOperational = baseCost + fuelCost;
-        double profit = baseCost * 0.25;
-        double customerCharge = totalOperational + profit;
+        double customerCharge = totalOperational + (baseCost*0.25);
         
         return new double[]{baseCost, time, fuelUsed, fuelCost, totalOperational, customerCharge};  
+        
     }
-    
-    
-   
-    public static void calculations(){
-        
-        
+     public static void saveDelivaryRecord(int source,int destination, int vehicle,double weight,double totalCharge, double time){
+        int deliveryCount=0;
+        if (deliveryCount>=MAX_DELIVERIES){
+            System.out.println("Delivery record list is already filled.");
+            return;
+        }
+        sourceCity[deliveryCount] = source;
+        destinationCity[deliveryCount] = destination;
+        vehicleType[deliveryCount] = vehicle;
+        vehicleWeight[deliveryCount] = weight;
+        totalCost[deliveryCount] = totalCharge;
+        totalTime[deliveryCount] = time;
+        deliveryCount++;
+
+        System.out.println("Delivery record saved successfully");
+    }   
+     
+     public static void displayDeliverySummary(int source, int destination, int vehicle, double weight, double[] r,String[]cities,String[]vehicles) {
+        System.out.println("\n===== DELIVERY SUMMARY =====");
+        System.out.println("From: " + cities[source]);
+        System.out.println("To: " + cities[destination]);
+        System.out.println("Vehicle: " + vehicles[vehicle]);
+        System.out.println("Weight: " + weight + " kg");
+        System.out.printf("Base Cost: %.2f LKR%n", r[0]);
+        System.out.printf("Fuel Used: %.2f L%n", r[2]);
+        System.out.printf("Fuel Cost: %.2f LKR%n", r[3]);
+        System.out.printf("Operational Cost: %.2f LKR%n", r[4]);
+        System.out.printf("Customer Charge: %.2f LKR%n", r[5]);
+       System.out.printf("Estimated Time: %.2f hours%n", r[1]);
     }
      public static void performanceReport(){
         
