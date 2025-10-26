@@ -54,7 +54,8 @@ public class ICT1011_assignment_AS20240918 {
                     performanceReport(distance);
                     break;
                 case 6:
-                    System.out.println("Exiting.....");
+                    saveDataToFile(cities,distance);
+                    System.out.println("Data Saved.Exiting.....");
                     break;
                 default :
                     System.out.println("Invalid choice.");       
@@ -433,6 +434,26 @@ public class ICT1011_assignment_AS20240918 {
 
         } catch (Exception e) {
             System.out.println(" Error loading data!");
+        }
+    }
+    public static void saveDataToFile(String[]cities,int[][]distance) {
+        try{
+            try (PrintWriter writer = new PrintWriter("data.txt")) {
+                writer.println(cityCount);
+                
+                for (int i = 0; i < cityCount; i++) {
+                    writer.println(cities[i]);
+                }
+                for (int i = 0; i < cityCount; i++) {
+                    for (int j = 0; j < cityCount; j++) {
+                        writer.print(distance[i][j] + " ");
+                    }
+                    writer.println();
+                }
+            }
+            System.out.println("Data saved successfully to data.txt");
+        } catch (Exception e) {
+            System.out.println("Error saving data!");
         }
     }
 }
