@@ -1,6 +1,8 @@
 
 package ict1011_assignment_as20240918;
 import java.util.Scanner;
+import java.io.File;
+import java.io.PrintWriter;
 
 public class ICT1011_assignment_AS20240918 {
      private static int choice;
@@ -30,7 +32,7 @@ public class ICT1011_assignment_AS20240918 {
         int[] ratePerKm = {30, 40, 80};
         int[] speed = {60, 50, 45};
         int[] efficiency = {12, 6, 4};
-
+        loadDataFromFile(cities,distance);
         do {
             printMenu();
             choice=sc.nextInt();
@@ -314,7 +316,7 @@ public class ICT1011_assignment_AS20240918 {
         return new double[]{baseCost, time, fuelUsed, fuelCost, totalOperational, customerCharge};  
         
     }
-     public static void saveDelivaryRecord(int source,int destination, int vehicle,double weight,double totalCharge, double time){
+    public static void saveDelivaryRecord(int source,int destination, int vehicle,double weight,double totalCharge, double time){
        
         if (deliveryCount>=MAX_DELIVERIES){
             System.out.println("Delivery record list is already filled.");
@@ -389,9 +391,9 @@ public class ICT1011_assignment_AS20240918 {
         }
         return mDist;
     }
-     public static void performanceReport(int[][]distance){
-         System.out.println("--- Performance Report ---");
-         System.out.println("Completed Total Deliveries: " + deliveryCount);
+    public static void performanceReport(int[][]distance){
+        System.out.println("--- Performance Report ---");
+        System.out.println("Completed Total Deliveries: " + deliveryCount);
 
         double totalRevenue = 0, totalDistance = 0, totalTimeSum = 0;
         for (int i = 0; i < deliveryCount; i++) {
@@ -405,4 +407,32 @@ public class ICT1011_assignment_AS20240918 {
             System.out.printf("Total Revenue: %.2f LKR%n", totalRevenue);    
         }  
      }
+    
+    public static void loadDataFromFile(String[]cities,int[][]distance) {
+        try{
+            File file = new File("data.txt");
+            if (!file.exists()) {
+                System.out.println("No saved data found (data.txt missing). Starting fresh!");
+                return;
+            }
+            try (Scanner reader = new Scanner(file)) {
+                cityCount = reader.nextInt();
+                reader.nextLine();
+            
+                for (int i = 0; i < cityCount; i++) {
+                    cities[i] = reader.nextLine();
+                }
+            
+                for (int i = 0; i < cityCount; i++) {
+                    for (int j = 0; j < cityCount; j++) {
+                        distance[i][j] = reader.nextInt();
+                    }
+                }
+            }
+            System.out.println("Data loaded successfully from data.txt");
+
+        } catch (Exception e) {
+            System.out.println(" Error loading data!");
+        }
+    }
 }
