@@ -49,7 +49,7 @@ public class ICT1011_assignment_AS20240918 {
                     findLeastCostPath(cities,distance);
                     break;
                 case 5:
-                    performanceReport();
+                    performanceReport(distance);
                     break;
                 case 6:
                     System.out.println("Exiting.....");
@@ -61,7 +61,7 @@ public class ICT1011_assignment_AS20240918 {
     }
     
     public static void printMenu(){
-        System.out.println("=====Logistic Management System=====");
+        System.out.println("/=====Logistic Management System=====/");
         System.out.println("1. City Management");
         System.out.println("2. Distance Management");
         System.out.println("3. Delivery requests");
@@ -74,12 +74,12 @@ public class ICT1011_assignment_AS20240918 {
     public static void cityManagement(String[]cities){
         Scanner sc=new Scanner(System.in);
         do {
-             System.out.println("=====City Management Menu ===== ");
+             System.out.println("====City Management Menu==== ");
              System.out.println("1. Add a city");
              System.out.println("2. Rename a city");
              System.out.println("3. Remove a city");
              System.out.println("4. List of current cities");
-             System.out.println("0. Back to main menu");
+             System.out.println("0. Back to Main Menu");
              System.out.println("Enter your choice: ");
              choice = sc.nextInt();
              sc.nextLine();
@@ -98,7 +98,7 @@ public class ICT1011_assignment_AS20240918 {
                     cityList(cities);
                     break;
                 case 0:
-                    System.out.println("Return to the main menu");
+                    System.out.println("Return to the Main Menu");
                     break;
                 default:
                     System.out.println("Invalid choice.");
@@ -149,11 +149,11 @@ public class ICT1011_assignment_AS20240918 {
     public static void distanceManagement(int[][]distance,String[]cities){
         Scanner sc= new Scanner(System.in);
          do {
-             System.out.println("=====Distance Management Menu ===== ");
+             System.out.println("====Distance Management Menu==== ");
              System.out.println("1. Input distance between two cities");
              System.out.println("2. Edit distance between two cities");
              System.out.println("3. View distance table");
-             System.out.println("4. Back to the main menu");
+             System.out.println("0. Back to the Main Menu");
              System.out.println("Enter your choice: ");
              choice = sc.nextInt();
              sc.nextLine();
@@ -168,13 +168,13 @@ public class ICT1011_assignment_AS20240918 {
                 case 3:
                     distanceTable(cities,distance);
                     break;
-                case 4:
-                    System.out.println("Return to the main menu");
+                case 0:
+                    System.out.println("Return to the Main Menu");
                     break;
                 default:
                     System.out.println("Invalid choice.");
             }
-        } while (choice != 4);        
+        } while (choice != 0);        
     }
     
     public static void inputDistance(int[][] distance,String[]cities){
@@ -200,8 +200,8 @@ public class ICT1011_assignment_AS20240918 {
         System.out.print("Enter distance in (km): ");
         int dist=sc.nextInt();
         
-        distance[source][destination]=dist;
-        distance[destination][source]=dist;
+        distance[source-1][destination-1]=dist;
+        distance[destination-1][source-1]=dist;
         
         System.out.println("Distance added successfully");   
     }
@@ -308,7 +308,8 @@ public class ICT1011_assignment_AS20240918 {
         double fuelUsed = D / E;
         double fuelCost = fuelUsed * F;
         double totalOperational = baseCost + fuelCost;
-        double customerCharge = totalOperational + (baseCost*0.25);
+        double profit=baseCost*0.25;
+        double customerCharge = totalOperational + profit;
         
         return new double[]{baseCost, time, fuelUsed, fuelCost, totalOperational, customerCharge};  
         
@@ -329,18 +330,22 @@ public class ICT1011_assignment_AS20240918 {
 
         System.out.println("Delivery record saved successfully");
     }   
-       public static void displayDeliverySummary(int source, int destination, int vehicle, double weight, double[] r,String[]cities,String[]vehicles) {
-        System.out.println("\n===== DELIVERY SUMMARY =====");
+    public static void displayDeliverySummary(int source, int destination, int vehicle, double weight, double[] r,String[]cities,String[]vehicles) {
+        System.out.println("==================================================== ");
+        System.out.println("DELIVERY COST ESTIMATION ");
+        System.out.println("====================================================");
         System.out.println("From: " + cities[source]);
         System.out.println("To: " + cities[destination]);
         System.out.println("Vehicle: " + vehicles[vehicle]);
         System.out.println("Weight: " + weight + " kg");
+        System.out.println("---------------------------------------------------- ");
         System.out.printf("Base Cost: %.2f LKR%n", r[0]);
         System.out.printf("Fuel Used: %.2f L%n", r[2]);
         System.out.printf("Fuel Cost: %.2f LKR%n", r[3]);
         System.out.printf("Operational Cost: %.2f LKR%n", r[4]);
         System.out.printf("Customer Charge: %.2f LKR%n", r[5]);
         System.out.printf("Estimated Time: %.2f hours%n", r[1]);
+        System.out.println("---------------------------------------------------- ");
     }
     public static void findLeastCostPath(String[]cities,int[][]distance) {
         Scanner sc=new Scanner(System.in);
@@ -384,10 +389,20 @@ public class ICT1011_assignment_AS20240918 {
         }
         return mDist;
     }
-     public static void performanceReport(){
+     public static void performanceReport(int[][]distance){
+         System.out.println("--- Performance Report ---");
+         System.out.println("Completed Total Deliveries: " + deliveryCount);
 
-
-        
-    }  
-    
+        double totalRevenue = 0, totalDistance = 0, totalTimeSum = 0;
+        for (int i = 0; i < deliveryCount; i++) {
+            totalRevenue += totalCost[i];
+            totalDistance += distance[sourceCity[i]][destinationCity[i]];
+            totalTimeSum += totalTime[i];
+        }
+        if (deliveryCount > 0) {
+            System.out.printf("Covered Total Distance: %.2f km%n", totalDistance);
+            System.out.printf("Average Delivery Time: %.2f hours%n", (totalTimeSum / deliveryCount));
+            System.out.printf("Total Revenue: %.2f LKR%n", totalRevenue);    
+        }  
+     }
 }
